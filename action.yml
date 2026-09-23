@@ -1,0 +1,40 @@
+name: Project Pulse
+description: Turn GitHub repository activity into a readable project update
+author: Klastic
+
+branding:
+  icon: activity
+  color: purple
+
+inputs:
+  token:
+    description: GitHub token used to read repository activity
+    required: false
+  repository:
+    description: Repository in owner/name format, defaults to the current repository
+    required: false
+  since:
+    description: Reporting window such as 7d, 24h, or 2w
+    required: false
+  format:
+    description: Report format, markdown or json
+    required: false
+  output:
+    description: Path where the generated report is written
+    required: false
+  summary:
+    description: Add a Markdown report to the workflow summary
+    required: false
+  config:
+    description: Optional JSON configuration file
+    required: false
+
+outputs:
+  report:
+    description: Generated report content
+  report-path:
+    description: Path to the generated report file
+
+runs:
+  using: node24
+  main: src/action.js

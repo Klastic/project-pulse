@@ -3,9 +3,44 @@
 Project Pulse turns GitHub repository activity into a concise update that
 maintainers can share with their community or team.
 
-This first release is a dependency free CLI for public or private GitHub
-repositories. It produces deterministic Markdown or JSON and never sends a
-report anywhere without an explicit command.
+Project Pulse includes a dependency free CLI and GitHub Action for public or
+private GitHub repositories. It produces deterministic Markdown or JSON and
+never sends a report anywhere without an explicit command.
+
+## GitHub Action
+
+Add a scheduled workflow to any repository:
+
+```yaml
+name: Weekly Project Pulse
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 15 * * 5'
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Klastic/project-pulse@v0.2.0
+        id: pulse
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          since: 7d
+```
+
+The Action writes the report to the workflow summary and `project-pulse.md`.
+It also exposes `report` and `report-path` outputs for later delivery steps.
+
+See [`examples/weekly-pulse.yml`](examples/weekly-pulse.yml) for artifact
+upload and [`project-pulse.config.example.json`](project-pulse.config.example.json)
+for repository configuration.
 
 ## Requirements
 
@@ -79,8 +114,8 @@ npm run pack:check
 
 The implementation is intentionally divided into usable slices:
 
-1. CLI report generation
-2. GitHub Action and repository configuration
+1. CLI report generation, complete in 0.1.0
+2. GitHub Action and repository configuration, complete in 0.2.0
 3. Discord, Slack, and GitHub delivery adapters
 4. Audience templates and optional assisted summaries
 5. Web configuration and report history
