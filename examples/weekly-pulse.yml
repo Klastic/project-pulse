@@ -20,6 +20,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           since: 7d
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Preserve report
         uses: actions/upload-artifact@v4

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 
-const ALLOWED_KEYS = new Set(['since', 'format', 'output', 'summary'])
+const ALLOWED_KEYS = new Set(['since', 'format', 'output', 'summary', 'delivery'])
+const DELIVERY_KEYS = new Set(['githubIssue', 'dryRun'])
 
 export async function readConfig(path, { read = readFile } = {}) {
   if (!path) return {}
@@ -27,6 +28,16 @@ export async function readConfig(path, { read = readFile } = {}) {
   const unknown = Object.keys(config).filter((key) => !ALLOWED_KEYS.has(key))
   if (unknown.length > 0) {
     throw new Error(`Unknown configuration ${unknown.length === 1 ? 'key' : 'keys'}: ${unknown.join(', ')}`)
+  }
+
+  if (config.delivery !== undefined) {
+    if (!config.delivery || Array.isArray(config.delivery) || typeof config.delivery !== 'object') {
+      throw new Error('Configuration key "delivery" must contain a JSON object.')
+    }
+    const unknownDelivery = Object.keys(config.delivery).filter((key) => !DELIVERY_KEYS.has(key))
+    if (unknownDelivery.length > 0) {
+      throw new Error(`Unknown delivery configuration ${unknownDelivery.length === 1 ? 'key' : 'keys'}: ${unknownDelivery.join(', ')}`)
+    }
   }
 
   return config

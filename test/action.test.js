@@ -56,13 +56,14 @@ test('runs the Action and writes report, summary, and outputs', async () => {
     },
     writeFile: async (...args) => writes.push(args),
     appendFile: async (...args) => appends.push(args),
+    deliverReport: async () => [],
   })
 
   assert.equal(result.outputPath, 'pulse.md')
   assert.equal(writes[0][0], 'pulse.md')
   assert.match(writes[0][1], /Project Pulse: Klastic\/project-pulse/)
   assert.equal(appends[0][0], '/tmp/summary')
-  assert.equal(appends.filter(([path]) => path === '/tmp/output').length, 2)
+  assert.equal(appends.filter(([path]) => path === '/tmp/output').length, 3)
   assert.match(appends.find(([, value]) => value.startsWith('report-path'))[1], /pulse\.md/)
 })
 
@@ -85,6 +86,7 @@ test('does not write a summary when disabled', async () => {
     },
     writeFile: async () => {},
     appendFile: async (...args) => appends.push(args),
+    deliverReport: async () => [],
   })
 
   assert.equal(appends.some(([path]) => path === '/tmp/summary'), false)

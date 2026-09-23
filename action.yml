@@ -28,12 +28,28 @@ inputs:
   config:
     description: Optional JSON configuration file
     required: false
+  discord-webhook:
+    description: Discord webhook URL stored in a repository secret
+    required: false
+  slack-webhook:
+    description: Slack webhook URL stored in a repository secret
+    required: false
+  github-issue:
+    description: Create a GitHub issue containing the report
+    required: false
+    default: 'false'
+  dry-run:
+    description: Prepare delivery payloads without sending them
+    required: false
+    default: 'false'
 
 outputs:
   report:
     description: Generated report content
   report-path:
     description: Path to the generated report file
+  deliveries:
+    description: JSON results for requested destinations
 
 runs:
   using: node24
