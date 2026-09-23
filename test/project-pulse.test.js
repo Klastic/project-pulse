@@ -95,7 +95,24 @@ test('renders evidence links and summary metrics as Markdown', () => {
 })
 
 test('renders machine readable JSON', () => {
-  const output = renderPulse(buildPulse(activity, { since, until }), 'json')
+  const output = renderPulse(buildPulse(activity, { since, until }), 'json', { audience: 'executive' })
   assert.equal(JSON.parse(output).schemaVersion, 1)
+  assert.equal(JSON.parse(output).audience, 'executive')
   assert.throws(() => renderPulse({}, 'xml'), /Unsupported format/)
+})
+
+test('renders audience specific reports', () => {
+  const pulse = buildPulse(activity, { since, until })
+  const community = renderMarkdown(pulse, { audience: 'community' })
+  const maintainer = renderMarkdown(pulse, { audience: 'maintainer' })
+  const executive = renderMarkdown(pulse, { audience: 'executive' })
+  const changelog = renderMarkdown(pulse, { audience: 'changelog' })
+
+  assert.doesNotMatch(community, /Needs Attention/)
+  assert.match(maintainer, /Needs Attention/)
+  assert.match(executive, /Project Update/)
+  assert.match(executive, /Follow Up/)
+  assert.match(changelog, /## Added/)
+  assert.doesNotMatch(changelog, /By the Numbers/)
+  assert.throws(() => renderMarkdown(pulse, { audience: 'customer' }), /Unsupported audience/)
 })

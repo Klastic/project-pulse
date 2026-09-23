@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises'
 
-const ALLOWED_KEYS = new Set(['since', 'format', 'output', 'summary', 'delivery'])
+const ALLOWED_KEYS = new Set(['since', 'format', 'audience', 'output', 'summary', 'delivery'])
 const DELIVERY_KEYS = new Set(['githubIssue', 'dryRun'])
 
 export async function readConfig(path, { read = readFile } = {}) {

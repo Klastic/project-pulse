@@ -15,11 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Project Pulse
-        uses: Klastic/project-pulse@v0.2.0
+        uses: Klastic/project-pulse@v0.4.0
         id: pulse
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           since: 7d
+          audience: community
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Preserve report
