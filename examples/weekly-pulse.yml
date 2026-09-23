@@ -1,0 +1,29 @@
+name: Weekly Project Pulse
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 15 * * 5'
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Project Pulse
+        uses: Klastic/project-pulse@v0.2.0
+        id: pulse
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          since: 7d
+
+      - name: Preserve report
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-pulse
+          path: ${{ steps.pulse.outputs.report-path }}
+          retention-days: 14

@@ -1,4 +1,5 @@
 export { parseDuration, reportingWindow } from './duration.js'
+export { booleanValue, readConfig } from './config.js'
 export { GitHubClient } from './github.js'
 export { buildPulse } from './pulse.js'
 export { renderMarkdown, renderPulse } from './render.js'
