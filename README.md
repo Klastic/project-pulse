@@ -38,6 +38,27 @@ jobs:
 The Action writes the report to the workflow summary and `project-pulse.md`.
 It also exposes `report` and `report-path` outputs for later delivery steps.
 
+### Delivery
+
+Delivery is always opt in. Store webhook URLs in repository secrets rather
+than committing them to configuration:
+
+```yaml
+- uses: Klastic/project-pulse@v0.3.0
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+    slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+```
+
+Set `github-issue: true` to create an issue containing each report. That
+requires `issues: write` in the workflow permissions. Use `dry-run: true` to
+exercise report and payload generation without contacting any destination.
+
+Discord delivery suppresses mentions and splits long reports into multiple
+messages. Delivery output is available as JSON in the `deliveries` Action
+output. Webhook URLs and tokens are never included in reports or outputs.
+
 See [`examples/weekly-pulse.yml`](examples/weekly-pulse.yml) for artifact
 upload and [`project-pulse.config.example.json`](project-pulse.config.example.json)
 for repository configuration.
@@ -116,7 +137,7 @@ The implementation is intentionally divided into usable slices:
 
 1. CLI report generation, complete in 0.1.0
 2. GitHub Action and repository configuration, complete in 0.2.0
-3. Discord, Slack, and GitHub delivery adapters
+3. Discord, Slack, and GitHub issue delivery, complete in 0.3.0
 4. Audience templates and optional assisted summaries
 5. Web configuration and report history
 

@@ -2,5 +2,9 @@
   "since": "7d",
   "format": "markdown",
   "output": "project-pulse.md",
-  "summary": true
+  "summary": true,
+  "delivery": {
+    "githubIssue": false,
+    "dryRun": false
+  }
 }
