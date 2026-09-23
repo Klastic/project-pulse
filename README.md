@@ -28,7 +28,7 @@ jobs:
   pulse:
     runs-on: ubuntu-latest
     steps:
-      - uses: Klastic/project-pulse@v0.2.0
+      - uses: Klastic/project-pulse@v0.4.0
         id: pulse
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ Delivery is always opt in. Store webhook URLs in repository secrets rather
 than committing them to configuration:
 
 ```yaml
-- uses: Klastic/project-pulse@v0.3.0
+- uses: Klastic/project-pulse@v0.4.0
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
@@ -78,7 +78,7 @@ repository:
 
 ```bash
 export GH_TOKEN="your-token"
-node src/cli.js owner/repository --since 14d --format markdown
+node src/cli.js owner/repository --since 14d --format markdown --audience maintainer
 ```
 
 Save the report to a file:
@@ -96,6 +96,18 @@ node src/cli.js owner/repository --format json
 Project Pulse reads `GH_TOKEN` first and falls back to `GITHUB_TOKEN`. Tokens
 are never included in generated reports.
 
+### Audience templates
+
+Choose the amount and style of information appropriate for the reader:
+
+* `community` emphasizes releases and visible changes
+* `maintainer` includes closed issues and pull requests needing review
+* `executive` provides a short outcome and follow up summary
+* `changelog` emits Added, Fixed, and Changed sections
+
+Templates are deterministic and preserve links to GitHub evidence. Project
+Pulse does not require an AI provider to produce a useful report.
+
 ## CLI
 
 ```text
@@ -104,6 +116,7 @@ project-pulse <owner/repository|GitHub URL> [options]
 Options:
   --since <duration>    Reporting window such as 7d, 24h, or 2w
   --format <format>     markdown or json
+  --audience <name>     community, maintainer, executive, or changelog
   --output <path>       Write the report to a file
   --api-url <url>       GitHub API base URL
   --help                Show help
@@ -138,7 +151,7 @@ The implementation is intentionally divided into usable slices:
 1. CLI report generation, complete in 0.1.0
 2. GitHub Action and repository configuration, complete in 0.2.0
 3. Discord, Slack, and GitHub issue delivery, complete in 0.3.0
-4. Audience templates and optional assisted summaries
+4. Audience templates, complete in 0.4.0; assisted wording remains optional future work
 5. Web configuration and report history
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.

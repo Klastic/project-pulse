@@ -24,6 +24,7 @@ export async function runAction(dependencies = {}) {
   const repository = parseRepository(input('repository', env) || env.GITHUB_REPOSITORY)
   const sinceValue = input('since', env) || config.since || '7d'
   const format = input('format', env) || config.format || 'markdown'
+  const audience = input('audience', env) || config.audience || 'community'
   const outputPath = input('output', env) || config.output || (format === 'json' ? 'project-pulse.json' : 'project-pulse.md')
   const addSummary = booleanValue(input('summary', env), config.summary ?? true)
   const githubIssue = booleanValue(input('github-issue', env), config.delivery?.githubIssue ?? false)
@@ -36,7 +37,7 @@ export async function runAction(dependencies = {}) {
 
   const activity = await client.collect({ ...repository, since: window.since })
   const pulse = buildPulse(activity, window)
-  const report = renderPulse(pulse, format)
+  const report = renderPulse(pulse, format, { audience })
   await write(outputPath, report, 'utf8')
 
   if (addSummary && env.GITHUB_STEP_SUMMARY) {

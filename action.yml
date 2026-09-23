@@ -19,6 +19,9 @@ inputs:
   format:
     description: Report format, markdown or json
     required: false
+  audience:
+    description: Report audience, community, maintainer, executive, or changelog
+    required: false
   output:
     description: Path where the generated report is written
     required: false

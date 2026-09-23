@@ -13,6 +13,7 @@ Usage:
 Options:
   --since <duration>    Reporting window such as 7d, 24h, or 2w (default: 7d)
   --format <format>     markdown or json (default: markdown)
+  --audience <name>     community, maintainer, executive, or changelog
   --output <path>       Write the report to a file instead of stdout
   --api-url <url>       GitHub API base URL (default: https://api.github.com)
   --help                Show this help
@@ -26,6 +27,7 @@ export async function main(argv = process.argv.slice(2), dependencies = {}) {
     options: {
       since: { type: 'string', default: '7d' },
       format: { type: 'string', default: 'markdown' },
+      audience: { type: 'string', default: 'community' },
       output: { type: 'string', short: 'o' },
       'api-url': { type: 'string', default: 'https://api.github.com' },
       help: { type: 'boolean', short: 'h' },
@@ -44,7 +46,7 @@ export async function main(argv = process.argv.slice(2), dependencies = {}) {
   })
   const activity = await client.collect({ ...repository, since: window.since })
   const pulse = buildPulse(activity, window)
-  const output = renderPulse(pulse, values.format)
+  const output = renderPulse(pulse, values.format, { audience: values.audience })
 
   if (values.output) {
     await (dependencies.writeFile ?? writeFile)(values.output, output, 'utf8')

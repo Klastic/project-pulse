@@ -1,6 +1,7 @@
 {
   "since": "7d",
   "format": "markdown",
+  "audience": "community",
   "output": "project-pulse.md",
   "summary": true,
   "delivery": {
