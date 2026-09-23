@@ -1,0 +1,35 @@
+{
+  "name": "project-pulse",
+  "version": "0.1.0",
+  "description": "Turn GitHub repository activity into readable project updates.",
+  "type": "module",
+  "bin": {
+    "project-pulse": "./src/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "check": "node --check src/*.js && node --check test/*.js",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "pack:check": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "github",
+    "changelog",
+    "project-status",
+    "cli",
+    "open-source"
+  ],
+  "license": "MIT"
+}
